@@ -1,6 +1,6 @@
 import React from 'react'
 import Select from 'react-select'
-import { Formik } from 'formik'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 
 const options = [
@@ -14,12 +14,10 @@ const options = [
 
 class MySelect extends React.Component {
   handleChange = value => {
-    // this is going to call setFieldValue and manually update values.topcis
     this.props.onChange('topics', value)
   }
 
   handleBlur = () => {
-    // this is going to call setFieldTouched and manually update touched.topcis
     this.props.onBlur('topics', true)
   }
 
@@ -35,9 +33,7 @@ class MySelect extends React.Component {
           onBlur={this.handleBlur}
           value={this.props.value}
         />
-        {!!this.props.error && this.props.touched && (
-          <div style={{ color: 'red', marginTop: '.5rem' }}>{this.props.error}</div>
-        )}
+        <ErrorMessage name="topics" />
       </div>
     )
   }
@@ -87,21 +83,12 @@ const App = () => (
         setFieldTouched,
         isSubmitting,
       }) => (
-        <form onSubmit={handleSubmit}>
+        <Form>
           <label htmlFor="email" style={{ display: 'block' }}>
             Email
           </label>
-          <input
-            id="email"
-            placeholder="Enter your email"
-            type="email"
-            value={values.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          {errors.email && touched.email && (
-            <div style={{ color: 'red', marginTop: '.5rem' }}>{errors.email}</div>
-          )}
+          <Field id="email" placeholder="Enter your email" type="email" value={values.email} />
+          <ErrorMessage name="email" />
           <MySelect
             value={values.topics}
             onChange={setFieldValue}
@@ -120,7 +107,7 @@ const App = () => (
           <button type="submit" disabled={isSubmitting}>
             Submit
           </button>
-        </form>
+        </Form>
       )}
     </Formik>
   </div>
